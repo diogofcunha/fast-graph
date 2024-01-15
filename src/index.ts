@@ -129,4 +129,52 @@ export class Graph<T> {
 
     return neighbors;
   }
+
+  kahnTopologicalSort(): Array<Node<T>> {
+    const queue: Node<T>[] = [];
+    const left: Node<T>[] = [];
+    const result: Node<T>[] = [];
+
+    this._nodes.forEach(node => {
+      if (node.incomingNeighbors.length === 0) {
+        queue.push(node);
+      } else {
+        left.push({
+          ...node,
+          incomingNeighbors: node.incomingNeighbors.slice(0)
+        });
+      }
+    });
+
+    while (queue.length > 0) {
+      const currentNode = queue.shift() as Node<T>;
+      result.push(currentNode);
+
+      const outgoingNeighbors = this._edges.get(currentNode.id) || [];
+
+      for (const id of outgoingNeighbors) {
+        const neighborNode = left.find(l => l.id === id);
+
+        if (!neighborNode) {
+          continue;
+        }
+
+        neighborNode.incomingNeighbors = neighborNode.incomingNeighbors.filter(
+          n => {
+            return n !== currentNode.id;
+          }
+        );
+
+        if (neighborNode.incomingNeighbors.length === 0) {
+          queue.push(neighborNode);
+        }
+      }
+    }
+
+    if (result.length !== this._nodes.length) {
+      throw new Error("Graph has a cycle");
+    }
+
+    return result;
+  }
 }
