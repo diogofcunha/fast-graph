@@ -1,12 +1,13 @@
 {
-  "name": "npm-package",
-  "description": "npm-package-template",
+  "name": "fast-graph",
+  "version": "0.0.1-beta",
+  "description": "A fast implementation of graph data structure",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
     "lib/"
   ],
-  "repository": "git@github.com:diogofcunha/package-template.git",
+  "repository": "git@github.com:diogofcunha/fast-graph.git",
   "author": "Diogo Cunha",
   "license": "MIT",
   "scripts": {
@@ -21,8 +22,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@commitlint/cli": "^8.2.0",
-    "@threads/tsconfig": "^3.0.2",
     "@tsconfig/recommended": "^1.0.1",
     "@types/jest": "^29.1.2",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
@@ -57,7 +56,6 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "lint-staged"
     }
   },
