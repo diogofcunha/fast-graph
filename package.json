@@ -21,7 +21,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@commitlint/cli": "^8.2.0",
     "@threads/tsconfig": "^3.0.2",
     "@tsconfig/recommended": "^1.0.1",
     "@types/jest": "^29.1.2",
@@ -57,7 +56,6 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "lint-staged"
     }
   },
