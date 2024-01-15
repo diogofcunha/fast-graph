@@ -74,4 +74,117 @@ describe("Graph", () => {
       graph.removeEdge(new Node("1", 10), new Node("2", 20))
     ).toThrow();
   });
+
+  describe("Graph Khan's Topological Sort", () => {
+    test("Topological sort for a simple DAG", () => {
+      const node1 = new Node<string>("A", "Node A");
+      const node2 = new Node<string>("B", "Node B");
+      const node3 = new Node<string>("C", "Node C");
+
+      const graph = new Graph<string>();
+
+      graph.addNode(node1);
+      graph.addNode(node2);
+      graph.addNode(node3);
+
+      graph.addEdge(node1, node2);
+      graph.addEdge(node2, node3);
+
+      const sortedNodes = graph.kahnTopologicalSort();
+      expect(sortedNodes.map(node => node.value)).toEqual([
+        "Node A",
+        "Node B",
+        "Node C"
+      ]);
+    });
+
+    test("Topological sort for a graph with a cycle", () => {
+      const node1 = new Node<string>("A", "Node A");
+      const node2 = new Node<string>("B", "Node B");
+      const node3 = new Node<string>("C", "Node C");
+
+      const graph = new Graph<string>();
+
+      graph.addNode(node1);
+      graph.addNode(node2);
+      graph.addNode(node3);
+
+      graph.addEdge(node1, node2);
+      graph.addEdge(node2, node3);
+      graph.addEdge(node3, node1); // Introducing a cycle
+
+      expect(() => graph.kahnTopologicalSort()).toThrow("Graph has a cycle");
+    });
+
+    test("Topological sort for an empty graph", () => {
+      const graph = new Graph<string>();
+
+      expect(() => graph.kahnTopologicalSort()).not.toThrow();
+      expect(graph.kahnTopologicalSort()).toEqual([]);
+    });
+
+    test("Topological sort for a graph with disconnected components", () => {
+      const node1 = new Node<string>("A", "Node A");
+      const node2 = new Node<string>("B", "Node B");
+      const node3 = new Node<string>("C", "Node C");
+      const node4 = new Node<string>("D", "Node D");
+      const node5 = new Node<string>("E", "Node E");
+
+      const graph = new Graph<string>();
+
+      graph.addNode(node1);
+      graph.addNode(node2);
+      graph.addNode(node3);
+      graph.addNode(node4);
+      graph.addNode(node5);
+
+      graph.addEdge(node1, node2);
+      graph.addEdge(node3, node4);
+
+      const sortedNodes = graph.kahnTopologicalSort();
+      const expectedOrder = ["Node A", "Node C", "Node E", "Node B", "Node D"];
+
+      expect(sortedNodes.map(node => node.value)).toEqual(expectedOrder);
+    });
+
+    test("Topological sort for a graph with nodes having no incoming neighbors", () => {
+      const node1 = new Node<string>("A", "Node A");
+      const node2 = new Node<string>("B", "Node B");
+      const node3 = new Node<string>("C", "Node C");
+
+      const graph = new Graph<string>();
+
+      graph.addNode(node1);
+      graph.addNode(node2);
+      graph.addNode(node3);
+
+      const sortedNodes = graph.kahnTopologicalSort();
+      const expectedOrder = ["Node A", "Node B", "Node C"];
+
+      expect(sortedNodes.map(node => node.value)).toEqual(expectedOrder);
+    });
+
+    test("Topological sort for a graph with nodes having multiple incoming neighbors", () => {
+      const node1 = new Node<string>("A", "Node A");
+      const node2 = new Node<string>("B", "Node B");
+      const node3 = new Node<string>("C", "Node C");
+      const node4 = new Node<string>("D", "Node D");
+
+      const graph = new Graph<string>();
+
+      graph.addNode(node1);
+      graph.addNode(node2);
+      graph.addNode(node3);
+      graph.addNode(node4);
+
+      graph.addEdge(node1, node3);
+      graph.addEdge(node2, node3);
+      graph.addEdge(node4, node3);
+
+      const sortedNodes = graph.kahnTopologicalSort();
+      const expectedOrder = ["Node A", "Node B", "Node D", "Node C"];
+
+      expect(sortedNodes.map(node => node.value)).toEqual(expectedOrder);
+    });
+  });
 });
