@@ -12,7 +12,6 @@ A robust and fast package for handling graph opperations and algorithms
 
 🚀 Cutting-edge TypeScript library designed to empower developers with a high-performance solution for efficient graph operations and algorithms. With a focus on speed and reliability, this library simplifies the implementation of graph-related tasks, offering a comprehensive set of features for seamless integration into any real world case.
 
-
 ## Install
 
 ```bash
@@ -40,10 +39,10 @@ npm install fast-graph
 The `Node` class represents a node in the graph, holding a unique identifier (`id`) and an associated value of generic type (`T`). The `incomingNeighbors` property tracks incoming edges to the node.
 
 ```typescript
-import { Node } from 'fast-graph';
+import { Node } from "fast-graph";
 
 // Example Usage:
-const myNode = new Node<string>('uniqueId', 'Node Value');
+const myNode = new Node<string>("uniqueId", "Node Value");
 ```
 
 #### 2. **Graph Class:**
@@ -51,14 +50,14 @@ const myNode = new Node<string>('uniqueId', 'Node Value');
 The `Graph` class is the core component for graph operations. It allows you to create, manipulate, and perform various algorithms on graphs.
 
 ```typescript
-import { Node, Graph } from 'fast-graph';
+import { Node, Graph } from "fast-graph";
 
 // Example Usage:
 const myGraph = new Graph<string>();
 
 // Adding Nodes
-const nodeA = new Node<string>('A', 'Node A');
-const nodeB = new Node<string>('B', 'Node B');
+const nodeA = new Node<string>("A", "Node A");
+const nodeB = new Node<string>("B", "Node B");
 myGraph.addNode(nodeA);
 myGraph.addNode(nodeB);
 
