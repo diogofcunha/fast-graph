@@ -45,7 +45,7 @@ jobs:
 executors:
   node:
     docker:
-      - image: circleci/node:20
+      - image: cimg/node:21.6.0
     working_directory: ~/repo
 
 commands:
