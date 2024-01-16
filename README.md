@@ -99,6 +99,20 @@ await myGraph.bfsAsync(async node => {
 
   return SearchAlgorithmNodeBehavior.continue;
 });
+
+// Use DFS to visit all nodes in the graph
+myGraph.dfs(node => {
+  console.log(`Visiting Node ${node.id} with value ${node.value}`);
+  return SearchAlgorithmNodeBehavior.continue;
+});
+
+// Use DFS to find a node
+myGraph.dfs(node => {
+  console.log(`Visiting Node ${node.id} with value ${node.value}`);
+  return node.id === "id_your_looking_for"
+    ? SearchAlgorithmNodeBehavior.break
+    : SearchAlgorithmNodeBehavior.continue;
+});
 ```
 
 Note: Ensure that you handle errors appropriately, as the library throws an error if attempting operations on non-existing nodes or in the presence of cycles.

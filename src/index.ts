@@ -250,4 +250,35 @@ export class Graph<T> {
       }
     }
   }
+
+  dfs(onNode: (node: Node<T>) => SearchAlgorithmNodeBehavior): void {
+    const stack = [];
+
+    if (!this._nodes.length) {
+      return;
+    }
+
+    stack.push(this._nodes[0]);
+    const visited = new Set();
+    visited.add(stack[0]?.id);
+
+    while (stack.length > 0) {
+      const currentNode = stack.pop() as Node<T>;
+
+      const nodeBehavior = onNode(currentNode);
+
+      if (nodeBehavior === SearchAlgorithmNodeBehavior.break) {
+        break;
+      }
+
+      const neighbors = this.getNeighbors(currentNode);
+
+      for (const n of neighbors) {
+        if (!visited.has(n.id)) {
+          stack.push(n);
+          visited.add(n.id);
+        }
+      }
+    }
+  }
 }
