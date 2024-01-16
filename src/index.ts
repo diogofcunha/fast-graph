@@ -215,4 +215,39 @@ export class Graph<T> {
       }
     }
   }
+
+  async bfsAsync(
+    onNode: (node: Node<T>) => Promise<SearchAlgorithmNodeBehavior>
+  ): Promise<void> {
+    const queue = [];
+    const nodesToProcess = this._nodes.slice(0);
+
+    if (!nodesToProcess.length) {
+      return;
+    }
+
+    queue.push(nodesToProcess.shift());
+
+    const visited = new Set();
+    visited.add(queue[0]?.id);
+
+    while (queue.length > 0) {
+      const currentNode = queue.shift() as Node<T>;
+
+      const nodeBehavior = await onNode(currentNode);
+
+      if (nodeBehavior === SearchAlgorithmNodeBehavior.break) {
+        break;
+      }
+
+      const neighbors = this.getNeighbors(currentNode);
+
+      for (const n of neighbors) {
+        if (!visited.has(n.id)) {
+          queue.push(n);
+          visited.add(n.id);
+        }
+      }
+    }
+  }
 }
