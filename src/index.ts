@@ -3,6 +3,11 @@ export class Node<T> {
   constructor(public readonly id: string, public readonly value: T) {}
 }
 
+export enum SearchAlgorithmNodeBehavior {
+  continue = 0,
+  break = 1
+}
+
 export class Graph<T> {
   private _nodes: Array<Node<T>> = [];
   private _nodesById = new Map<string, number>();
@@ -176,5 +181,38 @@ export class Graph<T> {
     }
 
     return result;
+  }
+
+  bfs(onNode: (node: Node<T>) => SearchAlgorithmNodeBehavior): void {
+    const queue = [];
+    const nodesToProcess = this._nodes.slice(0);
+
+    if (!nodesToProcess.length) {
+      return;
+    }
+
+    queue.push(nodesToProcess.shift());
+
+    const visited = new Set();
+    visited.add(queue[0]?.id);
+
+    while (queue.length > 0) {
+      const currentNode = queue.shift() as Node<T>;
+
+      const nodeBehavior = onNode(currentNode);
+
+      if (nodeBehavior === SearchAlgorithmNodeBehavior.break) {
+        break;
+      }
+
+      const neighbors = this.getNeighbors(currentNode);
+
+      for (const n of neighbors) {
+        if (!visited.has(n.id)) {
+          queue.push(n);
+          visited.add(n.id);
+        }
+      }
+    }
   }
 }
