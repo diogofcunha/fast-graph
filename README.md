@@ -113,6 +113,13 @@ myGraph.dfs(node => {
     ? SearchAlgorithmNodeBehavior.break
     : SearchAlgorithmNodeBehavior.continue;
 });
+
+// Use DFS to visit all nodes in the graph async
+await myGraph.dfsAsync(async node => {
+  await yourExternalApiCall(node);
+
+  return SearchAlgorithmNodeBehavior.continue;
+});
 ```
 
 Note: Ensure that you handle errors appropriately, as the library throws an error if attempting operations on non-existing nodes or in the presence of cycles.
