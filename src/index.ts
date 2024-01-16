@@ -281,4 +281,37 @@ export class Graph<T> {
       }
     }
   }
+
+  async dfsAsync(
+    onNode: (node: Node<T>) => Promise<SearchAlgorithmNodeBehavior>
+  ): Promise<void> {
+    const stack = [];
+
+    if (!this._nodes.length) {
+      return;
+    }
+
+    stack.push(this._nodes[0]);
+    const visited = new Set();
+    visited.add(stack[0]?.id);
+
+    while (stack.length > 0) {
+      const currentNode = stack.pop() as Node<T>;
+
+      const nodeBehavior = await onNode(currentNode);
+
+      if (nodeBehavior === SearchAlgorithmNodeBehavior.break) {
+        break;
+      }
+
+      const neighbors = this.getNeighbors(currentNode);
+
+      for (const n of neighbors) {
+        if (!visited.has(n.id)) {
+          stack.push(n);
+          visited.add(n.id);
+        }
+      }
+    }
+  }
 }
