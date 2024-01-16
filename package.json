@@ -69,5 +69,20 @@
       "prettier --write",
       "git add"
     ]
-  }
+  },
+  "keywords": [
+    "graph",
+    "algorithms",
+    "data-structures",
+    "performance",
+    "dependency-resolution",
+    "network-routing",
+    "recommendation-systems",
+    "social-networks",
+    "software-development",
+    "build-systems",
+    "maps",
+    "supply-chain",
+    "topological-sort"
+  ]
 }
