@@ -86,10 +86,10 @@ Note: Ensure that you handle errors appropriately, as the library throws an erro
 
 Contributions are welcome! Please submit a pull request with any improvements or bug fixes. Make sure to add tests for any new features and bug fixes, and ensure that the existing tests pass.
 
-# License
+## License
 
 This project is licensed under the MIT License.
 
-# Contact
+## Contact
 
 If you need help or have questions, feel free to open an issue in the GitHub repository.
