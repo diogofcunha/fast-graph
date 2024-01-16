@@ -8,6 +8,9 @@ export enum SearchAlgorithmNodeBehavior {
   break = 1
 }
 
+type OnNodeFn<T> = (node: Node<T>) => SearchAlgorithmNodeBehavior;
+type OnNodeFnAsync<T> = (node: Node<T>) => Promise<SearchAlgorithmNodeBehavior>;
+
 export class Graph<T> {
   private _nodes: Array<Node<T>> = [];
   private _nodesById = new Map<string, number>();
@@ -183,7 +186,7 @@ export class Graph<T> {
     return result;
   }
 
-  bfs(onNode: (node: Node<T>) => SearchAlgorithmNodeBehavior): void {
+  bfs(onNode: OnNodeFn<T>): void {
     const queue = [];
     const nodesToProcess = this._nodes.slice(0);
 
@@ -216,9 +219,7 @@ export class Graph<T> {
     }
   }
 
-  async bfsAsync(
-    onNode: (node: Node<T>) => Promise<SearchAlgorithmNodeBehavior>
-  ): Promise<void> {
+  async bfsAsync(onNode: OnNodeFnAsync<T>): Promise<void> {
     const queue = [];
     const nodesToProcess = this._nodes.slice(0);
 
@@ -251,7 +252,7 @@ export class Graph<T> {
     }
   }
 
-  dfs(onNode: (node: Node<T>) => SearchAlgorithmNodeBehavior): void {
+  dfs(onNode: OnNodeFn<T>): void {
     const stack = [];
 
     if (!this._nodes.length) {
@@ -282,9 +283,7 @@ export class Graph<T> {
     }
   }
 
-  async dfsAsync(
-    onNode: (node: Node<T>) => Promise<SearchAlgorithmNodeBehavior>
-  ): Promise<void> {
+  async dfsAsync(onNode: OnNodeFnAsync<T>): Promise<void> {
     const stack = [];
 
     if (!this._nodes.length) {
