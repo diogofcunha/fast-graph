@@ -318,9 +318,9 @@ export class Graph<T> {
     visited.add(stack[0]?.node.id);
 
     while (stack.length > 0) {
-      const { node: currentNode } = stack.pop() as Transition<T>;
+      const { node: currentNode, cost } = stack.pop() as Transition<T>;
 
-      const nodeBehavior = onNode(currentNode);
+      const nodeBehavior = onNode(currentNode, cost);
 
       if (nodeBehavior === SearchAlgorithmNodeBehavior.break) {
         break;
@@ -355,9 +355,9 @@ export class Graph<T> {
     visited.add(stack[0]?.node.id);
 
     while (stack.length > 0) {
-      const { node: currentNode } = stack.pop() as Transition<T>;
+      const { node: currentNode, cost } = stack.pop() as Transition<T>;
 
-      const nodeBehavior = await onNode(currentNode);
+      const nodeBehavior = await onNode(currentNode, cost);
 
       if (nodeBehavior === SearchAlgorithmNodeBehavior.break) {
         break;
