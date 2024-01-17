@@ -235,7 +235,10 @@ export class Graph<T> {
         break;
       }
 
-      const neighbors = this.getNeighbors(currentNode);
+      const connections = this._edges.get(currentNode.id) || [];
+      const neighbors = connections.map(c => {
+        return this.getNodeById(c.id);
+      });
 
       for (const n of neighbors) {
         if (!visited.has(n.id)) {
@@ -268,7 +271,10 @@ export class Graph<T> {
         break;
       }
 
-      const neighbors = this.getNeighbors(currentNode);
+      const connections = this._edges.get(currentNode.id) || [];
+      const neighbors = connections.map(c => {
+        return this.getNodeById(c.id);
+      });
 
       for (const n of neighbors) {
         if (!visited.has(n.id)) {
@@ -299,7 +305,10 @@ export class Graph<T> {
         break;
       }
 
-      const neighbors = this.getNeighbors(currentNode);
+      const connections = this._edges.get(currentNode.id) || [];
+      const neighbors = connections.map(c => {
+        return this.getNodeById(c.id);
+      });
 
       for (const n of neighbors) {
         if (!visited.has(n.id)) {
@@ -330,7 +339,10 @@ export class Graph<T> {
         break;
       }
 
-      const neighbors = this.getNeighbors(currentNode);
+      const connections = this._edges.get(currentNode.id) || [];
+      const neighbors = connections.map(c => {
+        return this.getNodeById(c.id);
+      });
 
       for (const n of neighbors) {
         if (!visited.has(n.id)) {
