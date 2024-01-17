@@ -17,10 +17,19 @@ interface EdgeConnection {
   id: string;
 }
 
+export interface Options {
+  weighted?: boolean;
+}
+
 export class Graph<T> {
   private _nodes: Array<Node<T>> = [];
   private _nodesById = new Map<string, number>();
   private _edges = new Map<string, Array<EdgeConnection>>();
+  public readonly weighted: boolean;
+
+  constructor({ weighted = false }: Options = {}) {
+    this.weighted = weighted;
+  }
 
   private getNodeById(node: string | Node<T>) {
     const nodeId = typeof node === "string" ? node : node.id;
