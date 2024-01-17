@@ -8,13 +8,19 @@ export enum SearchAlgorithmNodeBehavior {
   break = 1
 }
 
-type OnNodeFn<T> = (node: Node<T>) => SearchAlgorithmNodeBehavior;
-type OnNodeFnAsync<T> = (node: Node<T>) => Promise<SearchAlgorithmNodeBehavior>;
+export type OnNodeFn<T> = (node: Node<T>) => SearchAlgorithmNodeBehavior;
+export type OnNodeFnAsync<T> = (
+  node: Node<T>
+) => Promise<SearchAlgorithmNodeBehavior>;
+
+interface EdgeConnection {
+  id: string;
+}
 
 export class Graph<T> {
   private _nodes: Array<Node<T>> = [];
   private _nodesById = new Map<string, number>();
-  private _edges = new Map<string, string[]>();
+  private _edges = new Map<string, Array<EdgeConnection>>();
 
   private getNodeById(node: string | Node<T>) {
     const nodeId = typeof node === "string" ? node : node.id;
@@ -35,12 +41,15 @@ export class Graph<T> {
   addEdge(node1: Node<T>, node2: Node<T>) {
     this.getNodeById(node1);
     const storedNode2 = this.getNodeById(node2);
+    const edgesFromNode1 = this._edges.get(node1.id) || [];
 
-    const edges = new Set(this._edges.get(node1.id) || []);
+    const existingEdge = edgesFromNode1.find(e => e.id === node2.id);
 
-    edges.add(node2.id);
+    if (existingEdge) {
+      return;
+    }
 
-    this._edges.set(node1.id, [...edges]);
+    this._edges.set(node1.id, edgesFromNode1.concat([node2]));
 
     const incomingNeighbors = new Set(storedNode2.incomingNeighbors);
     incomingNeighbors.add(node1.id);
@@ -58,7 +67,7 @@ export class Graph<T> {
 
     const edges = (this._edges.get(node.id) || []).slice();
 
-    for (const id of edges) {
+    for (const { id } of edges) {
       const n = this.getNodeById(id);
       this.removeEdge(node, n);
     }
@@ -90,7 +99,7 @@ export class Graph<T> {
       for (let i = 0; i < edges.length; i++) {
         const e = edges[i];
 
-        if (e === node2.id) {
+        if (e.id === node2.id) {
           edges.splice(i, 1);
           break;
         }
@@ -127,7 +136,7 @@ export class Graph<T> {
 
     const outgoingNeighbors = this._edges.get(storedNode.id) || [];
 
-    for (const id of outgoingNeighbors) {
+    for (const { id } of outgoingNeighbors) {
       if (!visited.has(id)) {
         const neighbor = this.getNodeById(id);
         neighbors.push(neighbor);
@@ -160,7 +169,7 @@ export class Graph<T> {
 
       const outgoingNeighbors = this._edges.get(currentNode.id) || [];
 
-      for (const id of outgoingNeighbors) {
+      for (const { id } of outgoingNeighbors) {
         const neighborNode = left.find(l => l.id === id);
 
         if (!neighborNode) {
