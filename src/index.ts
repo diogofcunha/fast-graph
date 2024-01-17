@@ -57,7 +57,7 @@ export class Graph<T> {
     this._nodesById.set(value.id, length - 1);
   }
 
-  addEdge(node1: Node<T>, node2: Node<T>, weight?: boolean) {
+  addEdge(node1: Node<T>, node2: Node<T>, weight?: number) {
     if (this.weighted && weight === undefined) {
       throw new Error(`Can't add an edge to a weighted graph without weight`);
     }
@@ -76,7 +76,7 @@ export class Graph<T> {
       return;
     }
 
-    this._edges.set(node1.id, edgesFromNode1.concat([node2]));
+    this._edges.set(node1.id, edgesFromNode1.concat({ weight, id: node2.id }));
 
     const incomingNeighbors = new Set(storedNode2.incomingNeighbors);
     incomingNeighbors.add(node1.id);
