@@ -15,6 +15,7 @@ export type OnNodeFnAsync<T> = (
 
 interface EdgeConnection {
   id: string;
+  weight?: boolean;
 }
 
 export interface Options {
