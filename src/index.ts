@@ -8,8 +8,10 @@ export enum SearchAlgorithmNodeBehavior {
   break = 1
 }
 
-type OnNodeFn<T> = (node: Node<T>) => SearchAlgorithmNodeBehavior;
-type OnNodeFnAsync<T> = (node: Node<T>) => Promise<SearchAlgorithmNodeBehavior>;
+export type OnNodeFn<T> = (node: Node<T>) => SearchAlgorithmNodeBehavior;
+export type OnNodeFnAsync<T> = (
+  node: Node<T>
+) => Promise<SearchAlgorithmNodeBehavior>;
 
 interface EdgeConnection {
   id: string;
