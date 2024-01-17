@@ -8,14 +8,23 @@ export enum SearchAlgorithmNodeBehavior {
   break = 1
 }
 
-export type OnNodeFn<T> = (node: Node<T>) => SearchAlgorithmNodeBehavior;
+export type OnNodeFn<T> = (
+  node: Node<T>,
+  cost?: number
+) => SearchAlgorithmNodeBehavior;
 export type OnNodeFnAsync<T> = (
-  node: Node<T>
+  node: Node<T>,
+  cost?: number
 ) => Promise<SearchAlgorithmNodeBehavior>;
 
 interface EdgeConnection {
   id: string;
-  weight?: boolean;
+  weight?: number;
+}
+
+interface Transition<T> {
+  node: Node<T>;
+  cost?: number;
 }
 
 export interface Options {
@@ -214,22 +223,25 @@ export class Graph<T> {
   }
 
   bfs(onNode: OnNodeFn<T>): void {
-    const queue = [];
+    const queue: Array<Transition<T>> = [];
     const nodesToProcess = this._nodes.slice(0);
 
     if (!nodesToProcess.length) {
       return;
     }
 
-    queue.push(nodesToProcess.shift());
+    queue.push({
+      node: nodesToProcess.shift() as Node<T>,
+      cost: this.weighted ? 0 : undefined
+    });
 
     const visited = new Set();
-    visited.add(queue[0]?.id);
+    visited.add(queue[0]?.node.id);
 
     while (queue.length > 0) {
-      const currentNode = queue.shift() as Node<T>;
+      const { node: currentNode, cost } = queue.shift() as Transition<T>;
 
-      const nodeBehavior = onNode(currentNode);
+      const nodeBehavior = onNode(currentNode, cost);
 
       if (nodeBehavior === SearchAlgorithmNodeBehavior.break) {
         break;
@@ -237,35 +249,41 @@ export class Graph<T> {
 
       const connections = this._edges.get(currentNode.id) || [];
       const neighbors = connections.map(c => {
-        return this.getNodeById(c.id);
+        return {
+          node: this.getNodeById(c.id),
+          cost: this.weighted ? c.weight : undefined
+        };
       });
 
       for (const n of neighbors) {
-        if (!visited.has(n.id)) {
+        if (!visited.has(n.node.id)) {
           queue.push(n);
-          visited.add(n.id);
+          visited.add(n.node.id);
         }
       }
     }
   }
 
   async bfsAsync(onNode: OnNodeFnAsync<T>): Promise<void> {
-    const queue = [];
+    const queue: Array<Transition<T>> = [];
     const nodesToProcess = this._nodes.slice(0);
 
     if (!nodesToProcess.length) {
       return;
     }
 
-    queue.push(nodesToProcess.shift());
+    queue.push({
+      node: nodesToProcess.shift() as Node<T>,
+      cost: this.weighted ? 0 : undefined
+    });
 
     const visited = new Set();
-    visited.add(queue[0]?.id);
+    visited.add(queue[0]?.node.id);
 
     while (queue.length > 0) {
-      const currentNode = queue.shift() as Node<T>;
+      const { node: currentNode, cost } = queue.shift() as Transition<T>;
 
-      const nodeBehavior = await onNode(currentNode);
+      const nodeBehavior = await onNode(currentNode, cost);
 
       if (nodeBehavior === SearchAlgorithmNodeBehavior.break) {
         break;
@@ -273,31 +291,34 @@ export class Graph<T> {
 
       const connections = this._edges.get(currentNode.id) || [];
       const neighbors = connections.map(c => {
-        return this.getNodeById(c.id);
+        return {
+          node: this.getNodeById(c.id),
+          cost: this.weighted ? c.weight : undefined
+        };
       });
 
       for (const n of neighbors) {
-        if (!visited.has(n.id)) {
+        if (!visited.has(n.node.id)) {
           queue.push(n);
-          visited.add(n.id);
+          visited.add(n.node.id);
         }
       }
     }
   }
 
   dfs(onNode: OnNodeFn<T>): void {
-    const stack = [];
+    const stack: Array<Transition<T>> = [];
 
     if (!this._nodes.length) {
       return;
     }
 
-    stack.push(this._nodes[0]);
+    stack.push({ node: this._nodes[0], cost: this.weighted ? 0 : undefined });
     const visited = new Set();
-    visited.add(stack[0]?.id);
+    visited.add(stack[0]?.node.id);
 
     while (stack.length > 0) {
-      const currentNode = stack.pop() as Node<T>;
+      const { node: currentNode } = stack.pop() as Transition<T>;
 
       const nodeBehavior = onNode(currentNode);
 
@@ -306,32 +327,35 @@ export class Graph<T> {
       }
 
       const connections = this._edges.get(currentNode.id) || [];
-      const neighbors = connections.map(c => {
-        return this.getNodeById(c.id);
+      const neighbors: Array<Transition<T>> = connections.map(c => {
+        return {
+          node: this.getNodeById(c.id),
+          cost: this.weighted ? c.weight : undefined
+        };
       });
 
       for (const n of neighbors) {
-        if (!visited.has(n.id)) {
+        if (!visited.has(n.node.id)) {
           stack.push(n);
-          visited.add(n.id);
+          visited.add(n.node.id);
         }
       }
     }
   }
 
   async dfsAsync(onNode: OnNodeFnAsync<T>): Promise<void> {
-    const stack = [];
+    const stack: Array<Transition<T>> = [];
 
     if (!this._nodes.length) {
       return;
     }
 
-    stack.push(this._nodes[0]);
+    stack.push({ node: this._nodes[0], cost: this.weighted ? 0 : undefined });
     const visited = new Set();
-    visited.add(stack[0]?.id);
+    visited.add(stack[0]?.node.id);
 
     while (stack.length > 0) {
-      const currentNode = stack.pop() as Node<T>;
+      const { node: currentNode } = stack.pop() as Transition<T>;
 
       const nodeBehavior = await onNode(currentNode);
 
@@ -340,14 +364,17 @@ export class Graph<T> {
       }
 
       const connections = this._edges.get(currentNode.id) || [];
-      const neighbors = connections.map(c => {
-        return this.getNodeById(c.id);
+      const neighbors: Array<Transition<T>> = connections.map(c => {
+        return {
+          node: this.getNodeById(c.id),
+          cost: this.weighted ? c.weight : undefined
+        };
       });
 
       for (const n of neighbors) {
-        if (!visited.has(n.id)) {
+        if (!visited.has(n.node.id)) {
           stack.push(n);
-          visited.add(n.id);
+          visited.add(n.node.id);
         }
       }
     }
