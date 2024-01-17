@@ -1,6 +1,36 @@
 import { Node, Graph } from "..";
 
 describe("Graph", () => {
+  test("should fail when adding edges without weight to weighted graph", () => {
+    const graph = new Graph<number>({ weighted: true });
+    const node1 = new Node("1", 10);
+    const node2 = new Node("2", 20);
+
+    graph.addNode(node1);
+    graph.addNode(node2);
+
+    expect(() =>
+      graph.addEdge(node1, node2)
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"Can't add an edge to a weighted graph without weight"`
+    );
+  });
+
+  test("should fail when adding edges with weight to unweighted graph", () => {
+    const graph = new Graph<number>();
+    const node1 = new Node("1", 10);
+    const node2 = new Node("2", 20);
+
+    graph.addNode(node1);
+    graph.addNode(node2);
+
+    expect(() =>
+      graph.addEdge(node1, node2, 4)
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"Can't add an edge to a unweighted graph with weight"`
+    );
+  });
+
   test("should handle adding and removing multiple nodes and edges", () => {
     const graph = new Graph<number>();
     const node1 = new Node("1", 10);

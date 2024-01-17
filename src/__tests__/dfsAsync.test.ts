@@ -1,6 +1,6 @@
 import { Node, Graph, SearchAlgorithmNodeBehavior } from "..";
 
-describe("DFS Async Implementation", () => {
+describe("DFS Async Implementation unweighted graphs", () => {
   test("DFS should visit all nodes in the correct order", async () => {
     const graph = new Graph<number>();
 
@@ -78,5 +78,97 @@ describe("DFS Async Implementation", () => {
     });
 
     expect(visitedOrder).toEqual([]);
+  });
+});
+
+describe("DFS Async Implementation weighted graphs", () => {
+  test("DFS should visit all nodes in the correct order", async () => {
+    const graph = new Graph<number>({ weighted: true });
+
+    const nodeA = new Node<number>("A", 1);
+    const nodeB = new Node<number>("B", 2);
+    const nodeC = new Node<number>("C", 3);
+    const nodeD = new Node<number>("D", 4);
+    const nodeE = new Node<number>("E", 5);
+
+    graph.addNode(nodeA);
+    graph.addNode(nodeB);
+    graph.addNode(nodeC);
+    graph.addNode(nodeD);
+    graph.addNode(nodeE);
+
+    graph.addEdge(nodeA, nodeB, 1);
+    graph.addEdge(nodeA, nodeC, 2);
+    graph.addEdge(nodeB, nodeD, 3);
+    graph.addEdge(nodeC, nodeD, 4);
+    graph.addEdge(nodeD, nodeE, 5);
+
+    const visitedOrder: Array<string> = [];
+    const costOrder: Array<number | undefined> = [];
+    await graph.dfsAsync(async (node, cost) => {
+      visitedOrder.push(node.id);
+      costOrder.push(cost);
+      return SearchAlgorithmNodeBehavior.continue;
+    });
+
+    const expectedOrder = [nodeA.id, nodeC.id, nodeD.id, nodeE.id, nodeB.id];
+
+    expect(visitedOrder).toEqual(expectedOrder);
+    expect(costOrder).toEqual([0, 2, 4, 5, 1]);
+  });
+
+  test("DFS should stop when break is returned", async () => {
+    const graph = new Graph<number>({ weighted: true });
+
+    const nodeA = new Node<number>("A", 1);
+    const nodeB = new Node<number>("B", 2);
+    const nodeC = new Node<number>("C", 3);
+    const nodeD = new Node<number>("D", 4);
+    const nodeE = new Node<number>("E", 5);
+
+    graph.addNode(nodeA);
+    graph.addNode(nodeB);
+    graph.addNode(nodeC);
+    graph.addNode(nodeD);
+    graph.addNode(nodeE);
+
+    graph.addEdge(nodeA, nodeB, 1);
+    graph.addEdge(nodeA, nodeC, 2);
+    graph.addEdge(nodeB, nodeD, 3);
+    graph.addEdge(nodeC, nodeD, 4);
+    graph.addEdge(nodeD, nodeE, 5);
+
+    const visitedOrder: Array<string> = [];
+    const costOrder: Array<number | undefined> = [];
+
+    await graph.dfsAsync(async (node, cost) => {
+      visitedOrder.push(node.id);
+      costOrder.push(cost);
+
+      return node.value === 3
+        ? SearchAlgorithmNodeBehavior.break
+        : SearchAlgorithmNodeBehavior.continue;
+    });
+
+    const expectedOrder = [nodeA.id, nodeC.id];
+
+    expect(visitedOrder).toEqual(expectedOrder);
+    expect(costOrder).toEqual([0, 2]);
+  });
+
+  test("DFS on an empty graph should do nothing", async () => {
+    const graph = new Graph<number>({ weighted: true });
+
+    const visitedOrder: Array<string> = [];
+    const costOrder: Array<number | undefined> = [];
+
+    await graph.dfsAsync(async (node, cost) => {
+      visitedOrder.push(node.id);
+      costOrder.push(cost);
+      return SearchAlgorithmNodeBehavior.continue;
+    });
+
+    expect(visitedOrder).toEqual([]);
+    expect(costOrder).toEqual([]);
   });
 });
