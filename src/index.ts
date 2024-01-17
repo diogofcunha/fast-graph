@@ -48,7 +48,15 @@ export class Graph<T> {
     this._nodesById.set(value.id, length - 1);
   }
 
-  addEdge(node1: Node<T>, node2: Node<T>) {
+  addEdge(node1: Node<T>, node2: Node<T>, weight?: boolean) {
+    if (this.weighted && weight === undefined) {
+      throw new Error(`Can't add an edge to a weighted graph without weight`);
+    }
+
+    if (!this.weighted && weight !== undefined) {
+      throw new Error(`Can't add an edge to a unweighted graph with weight`);
+    }
+
     this.getNodeById(node1);
     const storedNode2 = this.getNodeById(node2);
     const edgesFromNode1 = this._edges.get(node1.id) || [];
