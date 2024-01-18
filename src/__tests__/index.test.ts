@@ -27,7 +27,7 @@ describe("Graph", () => {
     expect(() =>
       graph.addEdge(node1, node2, 4)
     ).toThrowErrorMatchingInlineSnapshot(
-      `"Can't add an edge to a unweighted graph with weight"`
+      `"Can't add an edge to an unweighted graph with weight"`
     );
   });
 
