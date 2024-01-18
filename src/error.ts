@@ -14,7 +14,7 @@ export class WeightedGraphEdgeError extends Error {
     super(
       type === WeightedGraphEdgeErrorType.ShouldProvideWeight
         ? `Can't add an edge to a weighted graph without weight`
-        : `Can't add an edge to a unweighted graph with weight`
+        : `Can't add an edge to an unweighted graph with weight`
     );
   }
 }
