@@ -38,6 +38,10 @@ export interface Options {
   weighted?: boolean;
 }
 
+export interface NodeDistance {
+  [nodeId: string]: number;
+}
+
 export class Graph<T> {
   private _nodes: Array<Node<T>> = [];
   private _nodesById = new Map<string, number>();
