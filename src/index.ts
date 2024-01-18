@@ -1,3 +1,10 @@
+import {
+  GraphCycleError,
+  NodeNotFoundError,
+  WeightedGraphEdgeError,
+  WeightedGraphEdgeErrorType
+} from "./error";
+
 export class Node<T> {
   public incomingNeighbors: string[] = [];
   constructor(public readonly id: string, public readonly value: T) {}
@@ -46,7 +53,7 @@ export class Graph<T> {
     const nodeIdx = this._nodesById.get(nodeId);
 
     if (nodeIdx === undefined) {
-      throw new Error(`Node ${nodeId} not found`);
+      throw new NodeNotFoundError(nodeId);
     }
 
     return this._nodes[nodeIdx];
@@ -59,11 +66,15 @@ export class Graph<T> {
 
   addEdge(node1: Node<T>, node2: Node<T>, weight?: number) {
     if (this.weighted && weight === undefined) {
-      throw new Error(`Can't add an edge to a weighted graph without weight`);
+      throw new WeightedGraphEdgeError(
+        WeightedGraphEdgeErrorType.ShouldProvideWeight
+      );
     }
 
     if (!this.weighted && weight !== undefined) {
-      throw new Error(`Can't add an edge to a unweighted graph with weight`);
+      throw new WeightedGraphEdgeError(
+        WeightedGraphEdgeErrorType.ShouldNotProvideWeight
+      );
     }
 
     this.getNodeById(node1);
@@ -102,7 +113,7 @@ export class Graph<T> {
     const nodeIndex = this._nodesById.get(node.id);
 
     if (nodeIndex === undefined) {
-      throw new Error(`Node ${node.id} not found`);
+      throw new NodeNotFoundError(node.id);
     }
 
     this._nodes.splice(nodeIndex, 1);
@@ -216,7 +227,7 @@ export class Graph<T> {
     }
 
     if (result.length !== this._nodes.length) {
-      throw new Error("Graph has a cycle");
+      throw new GraphCycleError();
     }
 
     return result;
