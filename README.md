@@ -120,6 +120,9 @@ await myGraph.dfsAsync(async node => {
 
   return SearchAlgorithmNodeBehavior.continue;
 });
+
+// Use Dijkstra's algorithm to discover shortest path from a node to all other nodes.
+const dijkstraResult: NodeDistance = graph.dijkstra(nodeA);
 ```
 
 Note: Ensure that you handle errors appropriately, as the library throws an error if attempting operations on non-existing nodes or in the presence of cycles.
