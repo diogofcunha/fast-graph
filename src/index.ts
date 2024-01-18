@@ -394,4 +394,47 @@ export class Graph<T> {
       }
     }
   }
+
+  dijkstra(originalNode: Node<T>): NodeDistance {
+    if (!this._nodes.length) {
+      return {};
+    }
+
+    this.getNodeById(originalNode);
+
+    const distance: NodeDistance = { [originalNode.id]: 0 };
+
+    const queue: Array<Transition<T>> = [
+      {
+        node: originalNode,
+        cost: this.weighted ? 0 : undefined
+      }
+    ];
+
+    while (queue.length > 0) {
+      const { node: currentNode } = queue.shift() as Transition<T>;
+
+      const connections = this._edges.get(currentNode.id) || [];
+      const neighbors: Array<Transition<T>> = connections.map(c => {
+        return {
+          node: this.getNodeById(c.id),
+          cost: this.weighted ? c.weight : undefined
+        };
+      });
+
+      for (const nb of neighbors) {
+        const tentativeDistance = distance[currentNode.id] + (nb.cost || 0);
+
+        if (
+          distance[nb.node.id] === undefined ||
+          tentativeDistance < distance[nb.node.id]
+        ) {
+          distance[nb.node.id] = tentativeDistance;
+          queue.push(nb);
+        }
+      }
+    }
+
+    return distance;
+  }
 }
