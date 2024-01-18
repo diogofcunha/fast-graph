@@ -1,4 +1,5 @@
 import {
+  GraphCycleError,
   NodeNotFoundError,
   WeightedGraphEdgeError,
   WeightedGraphEdgeErrorType
@@ -226,7 +227,7 @@ export class Graph<T> {
     }
 
     if (result.length !== this._nodes.length) {
-      throw new Error("Graph has a cycle");
+      throw new GraphCycleError();
     }
 
     return result;
