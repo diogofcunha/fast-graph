@@ -18,3 +18,9 @@ export class WeightedGraphEdgeError extends Error {
     );
   }
 }
+
+export class GraphCycleError extends Error {
+  constructor() {
+    super(`Graph has a cycle`);
+  }
+}
