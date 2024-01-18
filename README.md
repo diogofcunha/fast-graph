@@ -120,94 +120,79 @@ await myGraph.dfsAsync(async node => {
 
   return SearchAlgorithmNodeBehavior.continue;
 });
+
+// Use Dijkstra's algorithm to discover shortest path from a node to all other nodes.
+const dijkstraResult: NodeDistance = graph.dijkstra(nodeA);
 ```
 
 Note: Ensure that you handle errors appropriately, as the library throws an error if attempting operations on non-existing nodes or in the presence of cycles.
 
-## Algorithm guidelines
-
 ### Depth-First Search (DFS):
 
 1. **Traversal:**
-
    - DFS is commonly used for traversing or searching through a graph or tree data structure.
    - It explores as far as possible along each branch before backtracking.
-
 2. **Connected Components:**
-
    - DFS is used to identify connected components in an undirected graph.
-
 3. **Cycle Detection:**
-
    - DFS can be employed to detect cycles in a graph. If during the traversal, you encounter an already visited node, it indicates the presence of a cycle.
-
 4. **Pathfinding:**
-
    - DFS can help find paths between two nodes in a graph.
-
 5. **Maze Solving:**
-
    - DFS is useful for solving mazes and exploring possible paths.
-
 6. **Backtracking:**
    - It's a fundamental algorithm for backtracking problems.
 
 ### Breadth-First Search (BFS):
 
 1. **Shortest Path:**
-
    - BFS is commonly used to find the shortest path between two nodes in an unweighted graph.
-
 2. **Connected Components:**
-
    - Similar to DFS, BFS can identify connected components in an undirected graph.
-
 3. **Level Order Traversal:**
-
    - BFS is effective for performing level-order traversal of a tree or graph.
-
 4. **Maze Solving:**
-
    - BFS can be used for maze-solving algorithms.
-
 5. **Network Routing:**
    - BFS is applied in network routing protocols to discover the shortest path.
+
+### Dijkstra's Algorithm:
+
+1. **Shortest Paths:**
+   - Dijkstra's algorithm finds the shortest paths from a single source node to all other nodes in a graph with non-negative edge weights.
+2. **Non-Negative Weights:**
+   - It is particularly suited for graphs with non-negative weights, providing accurate shortest paths.
+3. **Applications:**
+   - Widely used in network routing, transportation systems, and any scenario where finding the shortest path is crucial.
+4. **Priority Queue:**
+   - Dijkstra's algorithm utilizes a priority queue to efficiently select the next node with the smallest tentative distance.
 
 ### Kahn's Topological Sort:
 
 1. **Directed Acyclic Graph (DAG):**
-
    - Kahn's algorithm is used for topological sorting of nodes in a Directed Acyclic Graph (DAG).
-
 2. **Dependency Resolution:**
-
    - In project management and build systems, Kahn's algorithm helps resolve dependencies between tasks or components.
-
 3. **Course Scheduling:**
-
    - In academic settings, Kahn's algorithm can be used for scheduling courses, ensuring prerequisites are met.
-
 4. **Task Execution Order:**
-
    - Kahn's algorithm is useful for determining the order of task execution when tasks have dependencies.
-
 5. **Compiler Dependency Analysis:**
    - In compilers, Kahn's algorithm aids in analyzing and resolving dependencies between modules.
 
 ### General Considerations:
 
 - **Use DFS for...**
-
   - Exploring all possible paths in a graph.
   - Cycle detection.
   - Backtracking problems.
-
 - **Use BFS for...**
-
   - Finding the shortest path in an unweighted graph.
   - Level order traversal.
   - Maze solving.
-
+- **Use Dijkstra's Algorithm for...**
+  - Finding the shortest paths in graphs with non-negative weights.
+  - Applications requiring accurate shortest paths.
 - **Use Kahn's Algorithm for...**
   - Topological sorting in Directed Acyclic Graphs.
   - Dependency resolution in various applications.
