@@ -1,3 +1,5 @@
+import { NodeNotFoundError } from "./error";
+
 export class Node<T> {
   public incomingNeighbors: string[] = [];
   constructor(public readonly id: string, public readonly value: T) {}
@@ -46,7 +48,7 @@ export class Graph<T> {
     const nodeIdx = this._nodesById.get(nodeId);
 
     if (nodeIdx === undefined) {
-      throw new Error(`Node ${nodeId} not found`);
+      throw new NodeNotFoundError(nodeId);
     }
 
     return this._nodes[nodeIdx];
@@ -102,7 +104,7 @@ export class Graph<T> {
     const nodeIndex = this._nodesById.get(node.id);
 
     if (nodeIndex === undefined) {
-      throw new Error(`Node ${node.id} not found`);
+      throw new NodeNotFoundError(node.id);
     }
 
     this._nodes.splice(nodeIndex, 1);
