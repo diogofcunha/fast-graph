@@ -7,7 +7,7 @@ import {
 
 export class Node<T> {
   public incomingNeighbors: string[] = [];
-  constructor(public readonly id: string, public readonly value: T) {}
+  constructor(public readonly id: string, public value: T) {}
 }
 
 export enum SearchAlgorithmNodeBehavior {
