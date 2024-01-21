@@ -342,14 +342,20 @@ export class Graph<T> {
     }
   }
 
-  dfs(onNode: OnNodeFn<T>): void {
+  dfs(onNode: OnNodeFn<T>, initialNode?: Node<T>): void {
     const stack: Array<Transition<T>> = [];
 
     if (!this._nodes.length) {
       return;
     }
 
-    stack.push({ node: this._nodes[0], cost: this.weighted ? 0 : undefined });
+    if (initialNode) {
+      this.getNodeById(initialNode);
+      stack.push({ node: initialNode, cost: this.weighted ? 0 : undefined });
+    } else {
+      stack.push({ node: this._nodes[0], cost: this.weighted ? 0 : undefined });
+    }
+
     const visited = new Set();
     visited.add(stack[0]?.node.id);
 
