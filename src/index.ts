@@ -385,14 +385,22 @@ export class Graph<T> {
     }
   }
 
-  async dfsAsync(onNode: OnNodeFnAsync<T>): Promise<void> {
+  async dfsAsync(
+    onNode: OnNodeFnAsync<T>,
+    initialNode?: Node<T>
+  ): Promise<void> {
     const stack: Array<Transition<T>> = [];
 
     if (!this._nodes.length) {
       return;
     }
 
-    stack.push({ node: this._nodes[0], cost: this.weighted ? 0 : undefined });
+    if (initialNode) {
+      this.getNodeById(initialNode);
+      stack.push({ node: initialNode, cost: this.weighted ? 0 : undefined });
+    } else {
+      stack.push({ node: this._nodes[0], cost: this.weighted ? 0 : undefined });
+    }
     const visited = new Set();
     visited.add(stack[0]?.node.id);
 
