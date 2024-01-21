@@ -288,7 +288,10 @@ export class Graph<T> {
     }
   }
 
-  async bfsAsync(onNode: OnNodeFnAsync<T>): Promise<void> {
+  async bfsAsync(
+    onNode: OnNodeFnAsync<T>,
+    initialNode?: Node<T>
+  ): Promise<void> {
     const queue: Array<Transition<T>> = [];
     const nodesToProcess = this._nodes.slice(0);
 
@@ -296,10 +299,19 @@ export class Graph<T> {
       return;
     }
 
-    queue.push({
-      node: nodesToProcess.shift() as Node<T>,
-      cost: this.weighted ? 0 : undefined
-    });
+    if (initialNode) {
+      this.getNodeById(initialNode);
+
+      queue.push({
+        node: initialNode,
+        cost: this.weighted ? 0 : undefined
+      });
+    } else {
+      queue.push({
+        node: nodesToProcess.shift() as Node<T>,
+        cost: this.weighted ? 0 : undefined
+      });
+    }
 
     const visited = new Set();
     visited.add(queue[0]?.node.id);
