@@ -33,7 +33,7 @@ describe("DFS Implementation unweighted graphs", () => {
     expect(visitedOrder).toEqual(expectedOrder);
   });
 
-  test("DFS should visit all nodes in the correct order", () => {
+  test("DFS should visit all connected nodes in the correct order if initial is supplied", () => {
     const graph = new Graph<number>();
 
     const nodeA = new Node<number>("A", 1);
@@ -155,7 +155,7 @@ describe("DFS Implementation weighted graphs", () => {
     expect(costOrder).toEqual([0, 2, 4, 5, 1]);
   });
 
-  test("DFS should visit all nodes in the correct order", () => {
+  test("DFS should visit all connected nodes in the correct order if initial is supplied", () => {
     const graph = new Graph<number>({ weighted: true });
 
     const nodeA = new Node<number>("A", 1);
