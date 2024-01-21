@@ -36,7 +36,7 @@ describe("BFS Async Implementation unweighted graph", () => {
   });
 
   test("BFS should visit all connected nodes in the correct order if initial is supplied", () => {
-    const graph = new Graph<number>({ weighted: true });
+    const graph = new Graph<number>();
 
     const nodeF = new Node<number>("F", 5);
     const nodeG = new Node<number>("G", 5);
@@ -55,27 +55,24 @@ describe("BFS Async Implementation unweighted graph", () => {
     graph.addNode(nodeD);
     graph.addNode(nodeE);
 
-    graph.addEdge(nodeF, nodeG, 1);
-    graph.addEdge(nodeG, nodeA, 1);
-    graph.addEdge(nodeA, nodeB, 1);
-    graph.addEdge(nodeA, nodeC, 2);
-    graph.addEdge(nodeB, nodeD, 3);
-    graph.addEdge(nodeC, nodeD, 4);
-    graph.addEdge(nodeD, nodeE, 5);
+    graph.addEdge(nodeF, nodeG);
+    graph.addEdge(nodeG, nodeA);
+    graph.addEdge(nodeA, nodeB);
+    graph.addEdge(nodeA, nodeC);
+    graph.addEdge(nodeB, nodeD);
+    graph.addEdge(nodeC, nodeD);
+    graph.addEdge(nodeD, nodeE);
 
     const visitedOrder: Array<string> = [];
-    const costOrder: Array<number | undefined> = [];
 
-    graph.bfs((node, cost) => {
+    graph.bfs(node => {
       visitedOrder.push(node.id);
-      costOrder.push(cost);
       return SearchAlgorithmNodeBehavior.continue;
     }, nodeA);
 
     const expectedOrder = [nodeA.id, nodeB.id, nodeC.id, nodeD.id, nodeE.id];
 
     expect(visitedOrder).toEqual(expectedOrder);
-    expect(costOrder).toEqual([0, 1, 2, 3, 5]);
   });
 
   test("BFS should stop when break is returned", async () => {
