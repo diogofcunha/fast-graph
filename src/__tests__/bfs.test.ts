@@ -92,12 +92,14 @@ describe("BFS Implementation weighted graph", () => {
     const nodeC = new Node<number>("C", 3);
     const nodeD = new Node<number>("D", 4);
     const nodeE = new Node<number>("E", 5);
+    const nodeF = new Node<number>("F", 5);
 
     graph.addNode(nodeA);
     graph.addNode(nodeB);
     graph.addNode(nodeC);
     graph.addNode(nodeD);
     graph.addNode(nodeE);
+    graph.addNode(nodeF);
 
     graph.addEdge(nodeA, nodeB, 1);
     graph.addEdge(nodeA, nodeC, 2);
